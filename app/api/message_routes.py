@@ -7,6 +7,7 @@ from loguru import logger
 from schemas.message import NewMessageRequest, SendMessageRequest
 from shared.storage import Database
 from shared.storage.models import Message, MessageType, DirectionType
+from shared.utils import TimeUtils
 from stream import StreamManager
 from stream.models import Event, EventType
 
@@ -51,6 +52,7 @@ async def send_message(
             direction=DirectionType.outgoing,
             type=MessageType.text,
             text=request.text,
+            created_at=TimeUtils(),
         )
 
         # Сохранение сообщения в базу данных
@@ -94,6 +96,7 @@ async def add_message(
             direction=DirectionType.incoming,
             type=MessageType.text,
             text=request.text,
+            created_at=TimeUtils(),
         )
         success = await db.add_message_to_chat(user_id=request.user_id, message=message)
         if success:

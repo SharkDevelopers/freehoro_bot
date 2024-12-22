@@ -7,7 +7,7 @@ from aiogram.types import FSInputFile, Message
 from aiogram_media_cache import MediaManager
 from shared.storage import Database
 from shared.storage.models import Chat, User
-
+from shared.utils import TimeUtils
 from provider import Provider
 
 from .middlewares import logger_handler
@@ -25,6 +25,7 @@ async def handler_start(message: Message, db: Database, media_manager: MediaMana
             id=message.from_user.id,
             full_name=message.from_user.full_name,
             username=message.from_user.username,
+            created_at=TimeUtils(),
         )
         await db.create_user(create_user)
         planing_push(message.from_user.id, 0)

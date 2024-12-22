@@ -65,10 +65,14 @@ async def get_chats(db: Database = Depends(get_db)):
     """
     try:
         # Получаем чаты для конкретного пользователя
-        chats = await db.get_all_chats_with_last_message()
+        chats = await db.get_all_chats()
         if not chats:
             return {"status": "success", "message": "Чаты не найдены."}
-        return {"status": "success", "data": chats}
+        result = []
+        for chat in chats:
+            chat.messages = [chat.messages[-1]]
+            result.append(chat.to_dict())
+        return {"status": "success", "chats": result}
     except Exception as e:
         logger.error(f"Ошибка при получении чатов: {e}")
         raise HTTPException(status_code=500, detail="Ошибка при получении чатов.")
@@ -84,7 +88,7 @@ async def get_chat(chat_id: int, db: Database = Depends(get_db)):
         chat = await db.get_chat_by_user_id(chat_id)
         if not chat:
             return {"status": "success", "message": "Чат не найден."}
-        return {"status": "success", "data": chat}
+        return {"status": "success", "data": chat.to_dict()}
     except Exception as e:
         logger.error(f"Ошибка при получении чата с ID {chat_id}: {e}")
         raise HTTPException(status_code=500, detail="Ошибка при получении чата.")

@@ -61,7 +61,6 @@ def get_chat_messages(user_id):
     response = requests.get(f"http://localhost:8005/get_chat/{user_id}")
     response.raise_for_status()  # Если статус-код не 200, будет выброшено исключение
 
-    print(response.json())
     chat = response.json().get("data", [])
     if chat:
         return jsonify(chat)
@@ -77,7 +76,6 @@ def get_chats():
         # Отправляем запрос к внешнему API
         response = requests.get("http://localhost:8005/get_chats")
         response.raise_for_status()  # Если статус-код не 200, будет выброшено исключение
-
         chats = response.json().get("chats", [])
         # Фильтрация по ключевым словам в последнем сообщении
         filter_text = request.args.get(

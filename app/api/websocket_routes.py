@@ -3,7 +3,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from loguru import logger
 
 from stream import StreamManager
-from .utils import get_stream_manager
+from .utils import get_stream_manager_websocket
 
 
 router = APIRouter()
@@ -13,7 +13,7 @@ router = APIRouter()
 async def websocket_handler(
     websocket: WebSocket,
     user_name: str,
-    stream_manager: StreamManager = Depends(get_stream_manager),
+    stream_manager: StreamManager = Depends(get_stream_manager_websockek),
 ):
     """
     Эндпоинт для обработки WebSocket подключений.

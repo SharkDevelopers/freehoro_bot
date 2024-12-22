@@ -65,22 +65,15 @@ class ChatMixin:
             self.logger.error(f"Ошибка при очистке чата с user_id {user_id}: {e}")
             return False
 
-    async def get_all_chats_with_last_message(self) -> list[dict]:
+    async def get_all_chats(self) -> list[Chat]:
         """Получение всех чатов с их последними сообщениями."""
         try:
-            chats_with_last_message = []
+            chats = []
             cursor = self.chats.find()  # Получаем все чаты
             async for chat_data in cursor:
-                chat = Chat(**chat_data)
-                if chat.messages:
-                    chats_with_last_message.append(
-                        {
-                            "user_id": chat.user_id,
-                            "last_message": chat.messages[-1].to_dict(),
-                        }
-                    )
+                chats.append(Chat(**chat_data))
             self.logger.info("Все чаты с последними сообщениями успешно получены.")
-            return chats_with_last_message
+            return chats
         except Exception as e:
             self.logger.error(
                 f"Ошибка при получении чатов с последними сообщениями: {e}"
