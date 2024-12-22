@@ -9,3 +9,4 @@ data/
 .session
 .sqlite
 poetry.lock
+venv/

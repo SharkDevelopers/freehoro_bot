@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="container">
+        <!-- Меню чатов -->
+        <div id="chat-menu">
+            <h3>Chats</h3>
+            <ul id="chat-list"></ul>
+        </div>
+
+        <!-- Основная часть контента -->
+        <div id="chat-container">
+            <div id="chat-header" style="display:none;">
+                <h2>Chat with <span id="chat-user-name"></span></h2>
+            </div>
+            <div id="chat-body" style="display:none;"></div>
+            <div id="chat-footer" style="display:none;">
+                <input type="text" id="message-input" placeholder="Type your message...">
+                <button id="send-message-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/websocket.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
