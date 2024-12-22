@@ -1,0 +1,78 @@
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: freehoro_mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+
+  # App API service
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: app_api
+    ports:
+      - "${app_port}:${app_port}"
+    depends_on:
+      - mongodb
+    environment:
+      - mongo_uri=${mongo_uri}
+      - app_port=${app_port}
+      - db_name=${db_name}
+      - bot_token=${bot_token}
+    volumes:
+      - ./app:/app
+      - ./shared:/shared
+    working_dir: /app
+    command: poetry run python main.py  # Пример использования poetry для старта
+
+  # Telegram Bot service
+  telegram_bot:
+    build:
+      context: ./telegram_bot
+      dockerfile: Dockerfile
+    container_name: telegram_bot
+    ports:
+      - "${telegram_port}:${telegram_port}"
+    depends_on:
+      - mongodb
+    environment:
+      - mongo_uri=${mongo_uri}
+      - app_port=${app_port}
+      - db_name=${db_name}
+      - bot_token=${bot_token}
+      - upload_chat_id=${upload_chat_id}
+    volumes:
+      - ./telegram_bot:/telegram_bot
+      - ./shared:/shared
+    working_dir: /telegram_bot
+    command: poetry run python main.py  # Пример использования poetry для старта
+
+  # GUI service
+  gui:
+    build:
+      context: ./gui
+      dockerfile: Dockerfile
+    container_name: gui
+    environment:
+      - secret_key_app=${secret_key_app}
+      - username_app=${username_app}
+      - password_app=${password_app}
+      - ${flask_port}:${flask_port}
+    ports:
+      - "${flask_port}:${flask_port}"
+    volumes:
+      - ./gui:/gui
+    working_dir: /gui
+    command: python main.py
+
+volumes:
+  mongo_data:
+
+
