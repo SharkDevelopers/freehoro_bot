@@ -1,0 +1,11 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+*.plk
+.env
+data/
+.log
+.db
+.session
+.sqlite
+poetry.lock
